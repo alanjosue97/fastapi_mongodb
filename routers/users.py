@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from motor.motor_asyncio import AsyncIOMotorDatabase
-from utils.exceptions import DuplicateRecord
+from utils.exceptions import DuplicateRecord, NotFoundRecord
 
 
 from models.users import CreateUsers
@@ -50,5 +50,7 @@ async def get_users(
         }
     )
 
+    if not user:
+        raise NotFoundRecord(f"User with id {users_id} does not exists")
     return user
 
